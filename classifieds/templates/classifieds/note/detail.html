@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+  {{ note.name }}
+{% endblock %}
+
+{% block content %}
+  <div class="note-detail">
+
+        {% if main_image %}
+            <img id="largeImg" src="{{ main_image.get_absolute_url }}">
+        {% else %}
+            <img src="{% static "img/no_image.png" %}">
+        {% endif %}   
+
+        <div id="thumbs">
+        {% for image in images %}
+            <a href="{{ image.get_absolute_url }}">
+                <img src="{{ image.get_absolute_url }}" style="height: 100px; width: 100px;">
+            </a>               
+        {% endfor %}   
+        </div>
+
+    <br><br><br><br><br><br><br><br><br><br><br><hr>  
+
+    <h1>{{ note.name }}</h1>
+    <h2><a href="{{ note.subcategory.get_absolute_url }}">{{ note.subcategory }}</a></h2>
+    <p class="price">${{ note.price }}</p>
+    {{ note.description|linebreaks }}
+    <p>{{ note.user.first_name }}</p>
+    <p>email: {{ note.user.email }}</p>
+  </div>
+
+<script>
+
+    let large = document.getElementById('largeImg');
+    var thumbs = document.getElementById('thumbs');
+
+    thumbs.addEventListener('click', function(e) {
+        let target = e.target;
+        if (target.tagName == 'A' || target.tagName == 'IMG') {
+            e.preventDefault();
+
+            if (target.tagName == 'A') {
+                large.setAttribute('src', target.getAttribute('href'));
+            } else if (target.tagName == 'IMG') {
+                large.setAttribute('src', target.parentNode.getAttribute('href'));
+            };
+        };
+    });
+
+    /* предзагрузка */
+    var imgs = thumbs.getElementsByTagName('img');
+    for (var i = 0; i < imgs.length; i++) {
+      var url = imgs[i].parentNode.href;
+      var img = document.createElement('img');
+      img.src = url;
+    }
+
+  </script>
+{% endblock %}
+

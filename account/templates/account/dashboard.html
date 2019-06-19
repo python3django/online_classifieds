@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+  <h1>Dashboard</h1>
+  <p>Welcome to your dashboard. You can <a href="{% url "edit" %}">edit your profile</a> 
+or <a href="{% url "password_change" %}">change your password</a>.</p>
+
+  <div>
+    <h2><a href="{% url "classifieds:create_note" %}">Создать новое объявление</a></h2>
+    <h2>Мои объявления</h2>
+    {% for note in notes %}
+        <p>{{ note.created }} | 
+            {{ note.subcategory.category }} > {{ note.subcategory }} > 
+            <a href="{{ note.get_absolute_url }}">{{ note }}</a>&nbsp;&nbsp;
+            <a href="{% url 'classifieds:update_note' id=note.id %}">Редактировать</a>&nbsp;&nbsp;
+            <a href="{% url 'classifieds:delete_note' id=note.id %}">Удалить</a>
+        </p>
+    {% endfor %}
+  </div>
+{% endblock %}

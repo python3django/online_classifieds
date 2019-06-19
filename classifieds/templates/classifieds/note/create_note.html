@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+  Создать объявление
+{% endblock %}
+
+{% block content %}
+  <div class="note-detail">
+   {% if request.user.is_authenticated %}
+     <h2>Создать новое или обновить существующее объявление </h2>
+     <form action="." method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <table>
+            <tr>
+                <th>
+                    <span>Выберите категорию:&nbsp;&nbsp;</span>
+                    <select name="selectCategory" id="selectCategory">
+                        <option selected value="?">Выберите категрию</option>
+                        {% for category in categorys %}
+                            <option value="{{ category.id }}">{{ category.name }}</option>
+                        {% endfor %}
+                    </select>
+                </th>
+                <th>
+                    <span>Выберите подкатегорию:&nbsp;&nbsp;</span>
+                    <select name="selectSubcategory" id="selectSubcategory"></select>
+                </th>
+            </tr>
+            {{ form_note }}
+            {{ formset }}
+        </table>
+        <p><input type="submit" value="Сохранить"></p>
+    </form>
+   {% endif %}
+  </div>
+
+ <script>
+  var subcategorys = {{ subcategorys_js|safe }};
+
+  var makeRelation = (function () {
+    function change(slave, data){
+      var x, dataArray, option;
+      slave.innerHTML = "";
+      if (!(this.value in data)){
+        return false;
+      }
+
+      dataArray = data[this.value];
+      for (var key in dataArray) {
+        option = document.createElement("option");
+        option.value = key;
+        option.innerHTML = dataArray[key];
+        slave.appendChild(option);
+      }}
+    return function (master, slave, data) {
+      master.onchange = function () {
+        change.call(this, slave, data);}
+      master.onchange();}
+  })();
+
+  makeRelation(document.getElementById("selectCategory"), document.getElementById("selectSubcategory"), subcategorys);
+</script>
+
+{% endblock %}
