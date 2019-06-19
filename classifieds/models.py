@@ -4,6 +4,12 @@ from django.contrib.auth.models import User
 #from django.utils.text import slugify
 from uuslug import slugify # slugify из библеотеки django-uuslug делает транслитерацию кирилици в латиницу
 from django.utils.safestring import mark_safe
+from PIL import Image as Im
+from os import path
+
+
+# Максимальный размер изображения по большей стороне
+MAX_SIZE = 800
 
 
 class Category(models.Model):
@@ -44,7 +50,7 @@ class Note(models.Model):
     name = models.CharField(max_length=200, db_index=True)
     slug = models.SlugField(max_length=200, db_index=True)
     description = models.TextField(blank=True)
-    price = models.DecimalField(max_digits=10, decimal_places=2, blank=True)
+    price = models.DecimalField(max_digits=10, decimal_places=2, default=0, blank=True)
     is_active = models.BooleanField(default=True, verbose_name='Активно')
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
@@ -79,3 +85,25 @@ class Image(models.Model):
 
     def image_img(self):
         return mark_safe(u'<a href="{0}"><img src="{0}" style="height: 50px; width: 50px;"></a>'.format(self.image.url))
+
+    def save(self, *args, **kwargs):
+        # Сначала - обычное сохранение
+        super(Image, self).save(*args, **kwargs)
+
+        if self.image:
+            filepath = self.image.path
+            width = self.image.width
+            height = self.image.height
+
+            max_size = max(width, height)
+
+            if max_size > MAX_SIZE:
+                im = Im.open(filepath)
+                # resize - безопасная функция, она создаёт новый объект, а не вносит изменения в исходный
+                im = im.resize(
+                    (
+                        round(width / max_size * MAX_SIZE),  # Сохраняем пропорции
+                        round(height / max_size * MAX_SIZE)
+                    ), Im.ANTIALIAS
+                )
+                im.save(filepath)

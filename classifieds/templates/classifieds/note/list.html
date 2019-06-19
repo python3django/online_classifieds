@@ -56,13 +56,14 @@
       <div class="item">
         <a href="{{ note.get_absolute_url }}">
             {% for image in note.images.all %}
-                {% if forloop.first %}<img src="{{ image.get_absolute_url }}">{% endif %}
+                {% if forloop.first %}<img src="{{ image.get_absolute_url }}" style="height: 100px; width: 100px;">{% endif %}
             {% empty %}
-                <img src="{% static "img/no_image.png" %}">
+                <img src="{% static "img/no_image.png" %}" style="height: 100px; width: 100px;">
             {% endfor %}   
-        </a>
-        <a href="{{ note.get_absolute_url }}">{{ note.name }}</a>
-        <br>
+        </a><br>
+        <span>{{ note.updated|date:"j M Y" }}</span><br>
+        <span>{{ note.updated|time }}</span><br>
+        <a href="{{ note.get_absolute_url }}">{{ note.name|truncatechars:11 }}</a><br>
         ${{ note.price }}
       </div>
 
