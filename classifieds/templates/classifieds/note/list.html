@@ -48,25 +48,28 @@
             {% if subcategory %}
                 &nbsp;>&nbsp;<a href="{{ subcategory.get_absolute_url }}">{{ subcategory.name }}</a>
             {% endif %}
-            {% else %}
-                Объявления    
         {% endif %}
     </h1>
     {% for note in notes %}
       <div class="item">
         <a href="{{ note.get_absolute_url }}">
-            {% for image in note.images.all %}
-                {% if forloop.first %}<img src="{{ image.get_absolute_url }}" style="height: 100px; width: 100px;">{% endif %}
+          {% with note.images.all as imgs %}
+            {% for image in imgs|dictsortreversed:"main" %}
+                {% if forloop.first %}
+                    <img src="{{ image.get_absolute_url }}" style="height: 100px; width: 100px;">
+                {% endif %}
             {% empty %}
                 <img src="{% static "img/no_image.png" %}" style="height: 100px; width: 100px;">
-            {% endfor %}   
+            {% endfor %}
+          {% endwith %}
         </a><br>
         <span>{{ note.updated|date:"j M Y" }}</span><br>
         <span>{{ note.updated|time }}</span><br>
         <a href="{{ note.get_absolute_url }}">{{ note.name|truncatechars:11 }}</a><br>
         ${{ note.price }}
       </div>
-
     {% endfor %}
   </div>
+
+
 {% endblock %}

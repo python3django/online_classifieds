@@ -28,17 +28,21 @@
                 </th>
             </tr>
             {{ form_note }}
-            {{ formset }}
+            <tr><th></th></tr>
+            {{ formset.management_form }}
+            {% for form in formset %}
+                {{ form }}
+            {% endfor %}          
         </table>
         <p><input type="submit" value="Сохранить"></p>
     </form>
    {% endif %}
   </div>
 
- <script>
-  var subcategorys = {{ subcategorys_js|safe }};
+<script>
+var subcategorys = {{ subcategorys_js|safe }};
 
-  var makeRelation = (function () {
+var makeRelation = (function () {
     function change(slave, data){
       var x, dataArray, option;
       slave.innerHTML = "";
@@ -57,9 +61,63 @@
       master.onchange = function () {
         change.call(this, slave, data);}
       master.onchange();}
-  })();
+})();
 
-  makeRelation(document.getElementById("selectCategory"), document.getElementById("selectSubcategory"), subcategorys);
+makeRelation(document.getElementById("selectCategory"), document.getElementById("selectSubcategory"), subcategorys);
+
+
+
+const cbimg0 = document.getElementById("id_images-0-main");
+const cbimg1 = document.getElementById("id_images-1-main");
+const cbimg2 = document.getElementById("id_images-2-main");
+const cbimg3 = document.getElementById("id_images-3-main");
+const cbimg4 = document.getElementById("id_images-4-main");
+  
+cbimg0.addEventListener('change', (event) => {
+  if (event.target.checked) {
+    cbimg1.checked = false;
+    cbimg2.checked = false;
+    cbimg3.checked = false;
+    cbimg4.checked = false;
+  }; 
+});
+  
+cbimg1.addEventListener('change', (event) => {
+  if (event.target.checked) {
+    cbimg0.checked = false;
+    cbimg2.checked = false;
+    cbimg3.checked = false;
+    cbimg4.checked = false;
+  }; 
+});
+
+cbimg2.addEventListener('change', (event) => {
+  if (event.target.checked) {
+    cbimg0.checked = false;
+    cbimg1.checked = false;
+    cbimg3.checked = false;
+    cbimg4.checked = false;
+  }; 
+});
+
+cbimg3.addEventListener('change', (event) => {
+  if (event.target.checked) {
+    cbimg0.checked = false;
+    cbimg1.checked = false;
+    cbimg2.checked = false;
+    cbimg4.checked = false;
+  }; 
+});
+
+cbimg4.addEventListener('change', (event) => {
+  if (event.target.checked) {
+    cbimg0.checked = false;
+    cbimg1.checked = false;
+    cbimg2.checked = false;
+    cbimg3.checked = false;
+  }; 
+});
+
+
 </script>
-
 {% endblock %}

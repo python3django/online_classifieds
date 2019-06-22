@@ -46,7 +46,9 @@ def note_detail(request, id, slug):
     images = note.images.all()
     main_image = None
     if images:
-        main_image = images[0]
+        for im in images:
+            if im.main:
+                main_image = im
     return render(
                 request, 
                 'classifieds/note/detail.html',
@@ -104,7 +106,7 @@ def update_note(request, id=id):
                 formset.save()
             messages.success(request, "Ваше сообщение успешно обновленно!")
             return redirect('classifieds:note_detail', id=edit_note.id, slug=edit_note.slug)
-    elif request.method != 'POST' and note.user == request.user:
+    elif request.method != 'POST' and note.user == request.user:        
         form_note = CreateNote(instance=note)
         formset = ImageFormSet(instance=note)
     elif note.user is not request.user:

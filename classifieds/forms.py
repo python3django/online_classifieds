@@ -19,9 +19,11 @@ class CreateNote(forms.ModelForm):
 
 
 ImageFormSet = inlineformset_factory(
-                            Note, 
-                            Image, 
-                            fields=('image',), 
-                            labels={'image': 'Картинка'}
-)
+                                        Note, 
+                                        Image, 
+                                        fields=('image', 'main'), 
+                                        labels={'image': 'Картинка', 'main': 'Сделать основным изображением'},
+                                        extra=5,
+                                        max_num=5
+                                     )
 
