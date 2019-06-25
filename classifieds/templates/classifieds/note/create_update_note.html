@@ -1,0 +1,206 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+  Создать объявление
+{% endblock %}
+
+{% block content %}
+  <div class="note-detail">
+   {% if request.user.is_authenticated %}
+     <h2 id="form_title">Создать новое или редактировать существующее объявление </h2>
+     <form id="id_form" action="." method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <table>
+            <tr>
+                <th>
+                    <span>Выберите категорию:&nbsp;&nbsp;</span>
+                    <select name="selectCategory" id="selectCategory">
+                        <option selected value="?">Выберите категрию</option>
+                        {% for category in categorys %}
+                            <option value="{{ category.id }}">{{ category.name }}</option>
+                        {% endfor %}
+                    </select>
+                </th>
+                <th>
+                    <span>Выберите подкатегорию:&nbsp;&nbsp;</span>
+                    <select name="selectSubcategory" id="selectSubcategory"></select>
+                </th>
+            </tr>
+            {{ form_note }}
+            <tr><th>Ниже Вы можете добавить до 5-ти изображений:</th></tr>
+        </table>
+        <table id="formset">
+            {{ formset.management_form }}
+            {% for form in formset %}
+                {{ form }}
+            {% endfor %}  
+        </table>
+        <p><input type="submit" value="Сохранить"></p>
+    </form>
+   {% endif %}
+  </div>
+
+<script>
+
+var hiddenForm = {{ hidden_form }};
+var subcategorys = {{ subcategorys_js|safe }};
+var category = {{ category_js }};
+var subcategory = {{ subcategory_js }};
+
+
+
+function formHidden(hiddenForm) {
+/*Скрываем отображаемые части формы если пользователь 
+пытается отредактировать чужое сообщение.*/
+    if (hiddenForm == 1) {
+        var formId = document.getElementById("id_form");
+        var formTitle = document.getElementById("form_title");
+        formId.setAttribute("style", "display: none");
+        formTitle.innerHTML = "Возможно Вы пытаетесь отредактировать чужое сообщение!";
+    };
+};
+formHidden(hiddenForm);
+
+
+
+var makeRelation = (function () {
+/* Создаем связанные поля select для category и subcategory */
+    function change(slave, data){
+      var x, dataArray, option;
+      slave.innerHTML = "";
+      if (!(this.value in data)){
+        return false;
+      }
+
+      dataArray = data[this.value];
+      for (var key in dataArray) {
+        option = document.createElement("option");
+        option.value = key;
+        option.innerHTML = dataArray[key];
+        slave.appendChild(option);
+      }}
+    return function (master, slave, data) {
+      master.onchange = function () {
+        change.call(this, slave, data);}
+      master.onchange();}
+})();
+makeRelation(document.getElementById("selectCategory"), document.getElementById("selectSubcategory"), subcategorys);
+
+
+
+function formSelected (category, subcategory) {
+/* В зависимости от принадлежности редактируемой записи к той или иной 
+category и subcategory соответствующим образом инициируем поля select 
+атрибутом selected
+*/
+    selectCategory = document.getElementById("selectCategory");
+    selectSubcategory = document.getElementById("selectSubcategory");
+    optionSelectCategory = selectCategory.querySelectorAll("option");
+    for ( var i = 0; i < optionSelectCategory.length; i++) {
+        if (optionSelectCategory[i].value == category) {
+            optionSelectCategory[i].setAttribute("selected", "true");
+            for ( key in subcategorys[category] ) {                
+                var opt = document.createElement('option');
+                opt.value = key;
+                opt.appendChild( document.createTextNode(subcategorys[category][key]) );
+                if ( key == subcategory) {
+                    opt.setAttribute("selected", "true");    
+                }
+                selectSubcategory.appendChild(opt);                        
+            };
+        };
+    };
+};
+formSelected (category, subcategory);
+
+
+
+function formsetDeleteSelect () {
+/* Если изображение не загружено, то скрываем соответствующие поля формы:
+"Сделать основным изображением" и "Удалить"
+*/
+    var formsetId = document.getElementById("formset");
+    var formsetTrTag = formsetId.getElementsByTagName("tr");
+    var idImage = [];
+    var idMain = [];
+    var idDelete = [];
+    for (var i = 0; i < formsetTrTag.length; i++) {
+        for (var j = 0; j < 5; j++) {
+            if (formsetTrTag[i].querySelector("#id_images-" + j + "-image")) {
+                idImage.push(formsetTrTag[i]);
+            } else if (formsetTrTag[i].querySelector("#id_images-" + j + "-main")) {
+                idMain.push(formsetTrTag[i]);
+            } else if (formsetTrTag[i].querySelector("#id_images-" + j + "-DELETE")) {
+                idDelete.push(formsetTrTag[i]);
+            };
+        };
+    };
+    for (var i = 0; i < 5; i++) {
+        if ( !(idImage[i].querySelector("a[href]")) ) {
+            idMain[i].setAttribute("style", "display: none"); 
+            idDelete[i].setAttribute("style", "display: none");
+        }
+    };
+};
+formsetDeleteSelect ();
+
+
+/* Делаем поля "Сделать основным изображением" типа "checkbox"
+похожими по функционалу на тип "radio", когда выделение одного поля
+снимает флажок с другого. Выделить можно только одно поле.
+*/
+const cbimg0 = document.getElementById("id_images-0-main");
+const cbimg1 = document.getElementById("id_images-1-main");
+const cbimg2 = document.getElementById("id_images-2-main");
+const cbimg3 = document.getElementById("id_images-3-main");
+const cbimg4 = document.getElementById("id_images-4-main");
+
+cbimg0.addEventListener('change', (event) => {
+  if (event.target.checked) {
+    cbimg1.checked = false;
+    cbimg2.checked = false;
+    cbimg3.checked = false;
+    cbimg4.checked = false;
+  }; 
+});
+  
+cbimg1.addEventListener('change', (event) => {
+  if (event.target.checked) {
+    cbimg0.checked = false;
+    cbimg2.checked = false;
+    cbimg3.checked = false;
+    cbimg4.checked = false;
+  }; 
+});
+
+cbimg2.addEventListener('change', (event) => {
+  if (event.target.checked) {
+    cbimg0.checked = false;
+    cbimg1.checked = false;
+    cbimg3.checked = false;
+    cbimg4.checked = false;
+  }; 
+});
+
+cbimg3.addEventListener('change', (event) => {
+  if (event.target.checked) {
+    cbimg0.checked = false;
+    cbimg1.checked = false;
+    cbimg2.checked = false;
+    cbimg4.checked = false;
+  }; 
+});
+
+cbimg4.addEventListener('change', (event) => {
+  if (event.target.checked) {
+    cbimg0.checked = false;
+    cbimg1.checked = false;
+    cbimg2.checked = false;
+    cbimg3.checked = false;
+  }; 
+});
+
+</script>
+{% endblock %}
+

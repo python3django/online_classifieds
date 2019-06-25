@@ -7,7 +7,10 @@ class CreateNote(forms.ModelForm):
     class Meta:
         model = Note
         fields = ('name', 'description', 'price', 'phone', 'email', 'messenger')
-        widgets = {'description': forms.Textarea(attrs={'rows':10, 'cols':80}),}
+        widgets = {
+                    'name': forms.TextInput(attrs={'size':80}),
+                    'description': forms.Textarea(attrs={'rows':10, 'cols':80}),
+        }
         labels = {
                 'name': 'Название сообщения',
                 'description': 'Описание',
