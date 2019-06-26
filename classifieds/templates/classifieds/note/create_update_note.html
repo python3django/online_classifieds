@@ -2,13 +2,27 @@
 {% load static %}
 
 {% block title %}
-  Создать объявление
+    {% if request.user and not note %}
+        Создать новое объявление
+    {% elif request.user == note.user %}
+        Редактировать объявление
+    {% elif request.user != note.user %}
+        Вы пытаетесь редактировать чужое объявление
+    {% endif %}
 {% endblock %}
 
 {% block content %}
   <div class="note-detail">
-   {% if request.user.is_authenticated %}
-     <h2 id="form_title">Создать новое или редактировать существующее объявление </h2>
+  {% if request.user.is_authenticated %}
+    {% if request.user and not note %}
+      <h2 id="form_title">Создать новое объявление</h2>
+    {% elif request.user == note.user %}
+      <h2 id="form_title">Редактировать объявление</h2>
+    {% elif request.user != note.user %}
+      <h2 id="form_title">Вы пытаетесь редактировать чужое объявление</h2>
+    {% endif %}  
+
+    {% if request.user == note.user or request.user and not note %}
      <form id="id_form" action="." method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <table>
@@ -38,29 +52,15 @@
         </table>
         <p><input type="submit" value="Сохранить"></p>
     </form>
-   {% endif %}
+    {% endif %}
+  {% endif %}
   </div>
 
 <script>
 
-var hiddenForm = {{ hidden_form }};
 var subcategorys = {{ subcategorys_js|safe }};
 var category = {{ category_js }};
 var subcategory = {{ subcategory_js }};
-
-
-
-function formHidden(hiddenForm) {
-/*Скрываем отображаемые части формы если пользователь 
-пытается отредактировать чужое сообщение.*/
-    if (hiddenForm == 1) {
-        var formId = document.getElementById("id_form");
-        var formTitle = document.getElementById("form_title");
-        formId.setAttribute("style", "display: none");
-        formTitle.innerHTML = "Возможно Вы пытаетесь отредактировать чужое сообщение!";
-    };
-};
-formHidden(hiddenForm);
 
 
 
@@ -144,6 +144,7 @@ function formsetDeleteSelect () {
     };
 };
 formsetDeleteSelect ();
+
 
 
 /* Делаем поля "Сделать основным изображением" типа "checkbox"

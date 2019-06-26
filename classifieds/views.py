@@ -120,7 +120,16 @@ def create_note(request):
             else:
                 subcategorys_js[category.id] = {subcategory.id: subcategory.name}
     subcategorys_js = json.dumps(subcategorys_js, ensure_ascii=False)
-    context = {'form_note': form_note, 'formset': formset, 'categorys': categorys, 'subcategorys_js': subcategorys_js}
+    subcategory_js = "false"
+    category_js = "false"
+    context = {
+                'form_note': form_note,
+                'formset': formset, 
+                'categorys': categorys, 
+                'subcategorys_js': subcategorys_js,
+                'subcategory_js': subcategory_js,
+                'category_js': category_js
+    }
     return render(request, 'classifieds/note/create_update_note.html', context)
 
 
@@ -148,11 +157,9 @@ def update_note(request, id=id):
     elif request.method == 'GET' and note.user == request.user:        
         form_note = CreateNote(instance=note)
         formset = ImageFormSet(instance=note)
-        hidden_form = "0"
     elif note.user is not request.user:
         form_note = None
         formset = None        
-        hidden_form = "1"
         messages.error(request, "У Вас недостаточно прав чтобы редактировать это сообщение.")
     categorys = Category.objects.all()
     subcategorys_js = {};
@@ -167,12 +174,12 @@ def update_note(request, id=id):
                 'form_note': form_note, 
                 'formset': formset, 
                 'categorys': categorys, 
-                'subcategorys_js': subcategorys_js, 
-                'hidden_form': hidden_form,
+                'subcategorys_js': subcategorys_js,
                 'subcategory_js': subcategory_js,
-                'category_js': category_js
+                'category_js': category_js,
+                'note': note
     }
-    print('formset: ', formset)
+    print('note: ', note.user)
     return render(request, 'classifieds/note/create_update_note.html', context)
 
 
