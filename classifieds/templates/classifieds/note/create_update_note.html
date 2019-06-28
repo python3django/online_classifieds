@@ -27,19 +27,27 @@
         {% csrf_token %}
         <table>
             <tr>
-                <th>
-                    <span>Выберите категорию:&nbsp;&nbsp;</span>
-                    <select name="selectCategory" id="selectCategory">
-                        <option selected value="?">Выберите категрию</option>
-                        {% for category in categorys %}
-                            <option value="{{ category.id }}">{{ category.name }}</option>
+                <th>Выберите рубрику:&nbsp;&nbsp;</th>
+                <td>
+                    <select name="selectRubric" id="selectRubric">
+                        <option selected value="?">Выберите рубрику</option>
+                        {% for rubric in rubrics %}
+                            <option value="{{ rubric.id }}">{{ rubric.name }}</option>
                         {% endfor %}
                     </select>
-                </th>
-                <th>
-                    <span>Выберите подкатегорию:&nbsp;&nbsp;</span>
+                </td>
+            </tr>
+            <tr>
+                <th>Выберите категорию:&nbsp;&nbsp;</th>
+                <td>
+                    <select name="selectCategory" id="selectCategory"></select>
+                </td>
+            </tr>
+            <tr>
+                <th>Выберите подкатегорию:&nbsp;&nbsp;</th>
+                <td>
                     <select name="selectSubcategory" id="selectSubcategory"></select>
-                </th>
+                </td>
             </tr>
             {{ form_note }}
             <tr><th>Ниже Вы можете добавить до 5-ти изображений:</th></tr>
@@ -58,13 +66,45 @@
 
 <script>
 
+var categorys = {{ categorys_js|safe }};
 var subcategorys = {{ subcategorys_js|safe }};
+var rubric = {{ rubric_js }};
 var category = {{ category_js }};
 var subcategory = {{ subcategory_js }};
 
 
 
-var makeRelation = (function () {
+var makeRelationCategorys = (function () {
+/* Создаем связанные поля select для rubric и category */
+    function change(slave, data){
+      var x, dataArray, option;
+      slave.innerHTML = "";
+      if (!(this.value in data)){
+        return false;
+      }
+    
+        option = document.createElement("option");
+        option.value = "?";
+        option.innerHTML = "Выберите категорию";
+        slave.appendChild(option);
+
+      dataArray = data[this.value];
+      for (var key in dataArray) {
+        option = document.createElement("option");
+        option.value = key;
+        option.innerHTML = dataArray[key];
+        slave.appendChild(option);
+      }}
+    return function (master, slave, data) {
+      master.onchange = function () {
+        change.call(this, slave, data);}
+      master.onchange();}
+})();
+makeRelationCategorys(document.getElementById("selectRubric"), document.getElementById("selectCategory"), categorys);
+
+
+
+var makeRelationSubcategorys = (function () {
 /* Создаем связанные поля select для category и subcategory */
     function change(slave, data){
       var x, dataArray, option;
@@ -85,34 +125,44 @@ var makeRelation = (function () {
         change.call(this, slave, data);}
       master.onchange();}
 })();
-makeRelation(document.getElementById("selectCategory"), document.getElementById("selectSubcategory"), subcategorys);
+makeRelationSubcategorys(document.getElementById("selectCategory"), document.getElementById("selectSubcategory"), subcategorys);
 
 
 
-function formSelected (category, subcategory) {
+function formSelected (rubric, category, subcategory) {
 /* В зависимости от принадлежности редактируемой записи к той или иной 
-category и subcategory соответствующим образом инициируем поля select 
+rubric, category и subcategory соответственно инициируем поля select 
 атрибутом selected
 */
+    selectRubric = document.getElementById("selectRubric");
     selectCategory = document.getElementById("selectCategory");
     selectSubcategory = document.getElementById("selectSubcategory");
-    optionSelectCategory = selectCategory.querySelectorAll("option");
-    for ( var i = 0; i < optionSelectCategory.length; i++) {
-        if (optionSelectCategory[i].value == category) {
-            optionSelectCategory[i].setAttribute("selected", "true");
-            for ( key in subcategorys[category] ) {                
-                var opt = document.createElement('option');
-                opt.value = key;
-                opt.appendChild( document.createTextNode(subcategorys[category][key]) );
-                if ( key == subcategory) {
-                    opt.setAttribute("selected", "true");    
+    optionSelectRubric = selectRubric.querySelectorAll("option");
+    for ( var i = 0; i < optionSelectRubric.length; i++) {
+        if (optionSelectRubric[i].value == rubric) {
+            optionSelectRubric[i].setAttribute("selected", "true");
+            for ( key in categorys[rubric] ) {                
+                var optionCategory = document.createElement('option');
+                optionCategory.value = key;
+                optionCategory.appendChild( document.createTextNode(categorys[rubric][key]) );
+                if ( key == category) {                    
+                    optionCategory.setAttribute("selected", "true");    
                 }
-                selectSubcategory.appendChild(opt);                        
+                selectCategory.appendChild(optionCategory);                        
+            };
+            for ( key in subcategorys[category] ) {                
+                var optionSubcategory = document.createElement('option');
+                optionSubcategory.value = key;
+                optionSubcategory.appendChild( document.createTextNode(subcategorys[category][key]) );
+                if ( key == subcategory) {                    
+                    optionSubcategory.setAttribute("selected", "true");    
+                }
+                selectSubcategory.appendChild(optionSubcategory);                        
             };
         };
     };
 };
-formSelected (category, subcategory);
+formSelected (rubric, category, subcategory);
 
 
 

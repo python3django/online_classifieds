@@ -12,7 +12,7 @@
     <h2>Мои объявления</h2>
     {% for note in notes %}
         <p>{{ note.created }} | 
-            {{ note.subcategory.category }} > {{ note.subcategory }} > 
+            {{ note.subcategory.category.rubric }} &rarr; {{ note.subcategory.category }} &rarr; {{ note.subcategory }} | 
             <a href="{{ note.get_absolute_url }}">{{ note }}</a>&nbsp;&nbsp;
             <a href="{% url 'classifieds:update_note' id=note.id %}">Редактировать</a>&nbsp;&nbsp;
             <a href="{% url 'classifieds:delete_note' id=note.id %}">Удалить</a>

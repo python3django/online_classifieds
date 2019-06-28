@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'classifieds.apps.ClassifiedsConfig',
+    'django.contrib.postgres',
 ]
 
 MIDDLEWARE = [
@@ -82,7 +83,18 @@ DATABASES = {
     }
 }
 
-
+"""
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'classifieds',
+        'USER': 'classifieds',
+        'PASSWORD': '09051945',
+        'HOST': '127.0.0.1', 
+        'PORT': '5432',
+    }
+}
+"""
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
 

@@ -12,7 +12,24 @@ from os import path
 MAX_SIZE = 800
 
 
+class Rubric(models.Model):
+    name = models.CharField(max_length=200, db_index=True)
+    slug = models.SlugField(max_length=200, unique=True)
+
+    class Meta:
+        ordering = ('name',)
+        verbose_name = 'rubric'
+        verbose_name_plural = 'rubrics'
+
+    def __str__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse('classifieds:note_list_by_rubric', args=[self.slug])
+
+
 class Category(models.Model):
+    rubric = models.ForeignKey(Rubric, related_name='category', on_delete=models.CASCADE)
     name = models.CharField(max_length=200, db_index=True)
     slug = models.SlugField(max_length=200, unique=True)
 
@@ -25,7 +42,7 @@ class Category(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('classifieds:note_list_by_category', args=[self.slug])
+        return reverse('classifieds:note_list_by_category', args=[self.rubric.slug, self.slug])
 
 
 class Subcategory(models.Model):
@@ -42,7 +59,7 @@ class Subcategory(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('classifieds:note_list_by_subcategory', args=[self.category.slug, self.slug])
+        return reverse('classifieds:note_list_by_subcategory', args=[self.category.rubric.slug, self.category.slug, self.slug])
 
 
 class Note(models.Model):
