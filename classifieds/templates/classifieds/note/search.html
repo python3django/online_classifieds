@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Поиск{% endblock %}
+
+{% block content %}
+  <div>
+    <h1>Поиск по объявлениям</h1>
+    <form action="." method="get">
+      {{ form.as_p }}
+      <p><input type="submit" value="Искать"></p>
+    </form>
+  </div>
+    <br><br><br><br><br><br>
+  <hr size="2px" color="#5993bb">
+  <div>
+  {% if query %}
+    <h1>Объявления содержащие "{{ query }}"</h1>
+    <h3>
+      {% with results.count as total_results %}
+          Найдено {{ total_results }} 
+        {% if total_results == 1 %}
+            результат
+        {% elif total_results >= 2 and total_results <= 4%}
+            результата
+        {% else %}
+            результатов
+        {% endif %}
+      {% endwith %}
+    </h3>
+  <table>
+    {% for note in results %}
+      <tr><td>
+        <h4><a href="{{ note.get_absolute_url }}">{{ note.name }}</a></h4>
+        {{ note.description|truncatewords:5 }}
+      </td></tr>
+    {% empty %}
+      <tr><td><p>Нет результат соответсвующего Вашему запросу.</p></td></tr>
+    {% endfor %}
+  </table>
+  {% endif %}
+  </div>
+{% endblock %}
+

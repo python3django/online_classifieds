@@ -18,6 +18,8 @@
 		  </li>
 		</ul>
 	  {% endif %}
+      
+      <span class="logo"><a href="{% url "classifieds:note_search" %}">Поиск</a></span>
 
 	  <span class="user">
 		{% if request.user.is_authenticated %}

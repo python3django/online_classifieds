@@ -3,6 +3,10 @@ from classifieds.models import Note, Image
 from django.forms import inlineformset_factory
 
 
+class SearchForm(forms.Form):
+    query = forms.CharField(label='Введите Ваш запрос', widget=forms.TextInput(attrs={'size':'50'}))
+
+
 class CreateNote(forms.ModelForm):
     class Meta:
         model = Note

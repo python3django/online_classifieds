@@ -1,18 +1,45 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Rubric, Category, Subcategory, Note
 from django.contrib.auth.decorators import login_required
-from classifieds.forms import CreateNote, ImageFormSet
+from classifieds.forms import CreateNote, ImageFormSet, SearchForm
 from django.utils import timezone
 from django.contrib import messages
 import json
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.contrib.auth.models import User
+from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
+
+
+def note_search(request):
+    form = SearchForm()
+    query = None
+    results = []
+    if 'query' in request.GET:
+        form = SearchForm(request.GET)
+        if form.is_valid():
+            query = form.cleaned_data['query']
+            #results = Note.objects.annotate(search=SearchVector('name', 'description'),).filter(search=query)
+
+            #search_vector = SearchVector('name', 'description')
+            #search_query = SearchQuery(query)
+            #results = Note.objects.annotate(search=search_vector, rank=SearchRank(search_vector, search_query)
+            #).filter(search=search_query).order_by('-rank')
+
+            search_vector = SearchVector('name', weight='A') + SearchVector('description', weight='B')
+            search_query = SearchQuery(query)
+            results = Note.objects.annotate(
+                rank=SearchRank(search_vector, search_query)
+            ).filter(rank__gte=0.3).order_by('-rank')
+
+    context = {'form': form, 'query': query, 'results': results}
+    return render(request, 'classifieds/note/search.html', context)
 
 
 def note_list(request):
     rubrics = Rubric.objects.all()
     notes = Note.objects.filter(is_active=True)
 
-    paginator = Paginator(notes, 6) # 3 сообщения на каждой странице 
+    paginator = Paginator(notes, 12) # 3 сообщения на каждой странице 
     page = request.GET.get('page') 
     try: 
         notes = paginator.page(page) 
@@ -105,6 +132,30 @@ def note_detail(request, id, slug):
     return render(request, 'classifieds/note/detail.html', context)
 
 
+def note_list_of_user(request, user_id):
+    notes = Note.objects.filter(user=user_id).filter(is_active=True)
+
+    paginator = Paginator(notes, 15) # 3 сообщения на каждой странице 
+    page = request.GET.get('page') 
+    try: 
+        notes = paginator.page(page) 
+    except PageNotAnInteger: 
+        # Если страница не является целым числом, перемещаемся на первую страницу 
+        notes = paginator.page(1) 
+    except EmptyPage: 
+        # Если страница за пределами допустимого диапазона перемещаемся на последнюю страницу 
+        notes = paginator.page(paginator.num_pages)
+     
+    try:
+        note_user = User.objects.get(pk=user_id)
+    except User.DoesNotExist:
+        note_user = None
+        messages.error(request, "Ошибка! Похоже что такого пользовтеля не существует!")
+
+    context = {'notes': notes, 'note_user': note_user}
+    return render(request, 'classifieds/note/list_note_user.html', context)
+
+
 @login_required
 def create_note(request):
     if request.method == 'POST':
@@ -182,7 +233,7 @@ def update_note(request, id=id):
     elif note.user is not request.user:
         form_note = None
         formset = None        
-        messages.error(request, "У Вас недостаточно прав чтобы редактировать это сообщение.")
+        messages.error(request, "У Вас недостаточно прав чтобы редактировать это объявление.")
     rubrics = Rubric.objects.all()
     categorys_js = {};
     for rubric in rubrics:

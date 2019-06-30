@@ -173,8 +173,7 @@ ul.errorlist {
     float:right;
     width:200px;
     padding:20px 10px 0px 0px;
-    background:#efefef; 
-    /*height:100vh;*/
+    background:#efefef;
     height:100vh;
 }
 
@@ -182,7 +181,7 @@ ul.errorlist {
 #main {
     float:left;
     width: 96%;
-    margin-right:-220px; 
+    margin-right:-220px;
     overflow:hidden;
 }
 
@@ -212,7 +211,7 @@ ul.errorlist {
 }
 
 .note-list .item {
-    width:140;
+    width:20vw;
     padding:30px 10px 10px 10px;
     float:left;
     text-align:center;

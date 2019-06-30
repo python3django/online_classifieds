@@ -36,9 +36,16 @@
         <p class="price">${{ note.price }}</p>
         {{ note.description|linebreaks }}
         <p>{{ note.user.first_name }}</p>
-        <p>email: {{ note.user.email }}</p>
+        <p>phone: {{ note.phone }}</p>
+        <p>email: {{ note.email }}</p>
+        <p>messenger: {{ note.messenger }}</p>
     </div>
   </div>
+    <hr>
+  <div align="center"><h2>
+    <a href="{% url 'classifieds:note_list_of_user' user_id=note.user.id %}">Показать все объявления пользователя {{ note.user.first_name }}</a>
+  </h2></div>
+    <br><br><br>
 
 <script>
 
