@@ -4,14 +4,14 @@
 {% block title %}Поиск{% endblock %}
 
 {% block content %}
-  <div>
+  <div id="search">
     <h1>Поиск по объявлениям</h1>
     <form action="." method="get">
       {{ form.as_p }}
       <p><input type="submit" value="Искать"></p>
     </form>
   </div>
-    <br><br><br><br><br><br>
+    <br><br><br><br><br><br><br><br>
   <hr size="2px" color="#5993bb">
   <div>
   {% if query %}
@@ -31,8 +31,19 @@
   <table>
     {% for note in results %}
       <tr><td>
-        <h4><a href="{{ note.get_absolute_url }}">{{ note.name }}</a></h4>
-        {{ note.description|truncatewords:5 }}
+          <a href="{{ note.get_absolute_url }}">
+            {% with note.images.all as imgs %}
+                {% for image in imgs|dictsortreversed:"main" %}
+                    {% if forloop.first %}
+                        <img src="{{ image.get_absolute_url }}" style="height: 50px; width: 50px;">
+                    {% endif %}
+                {% empty %}
+                    <img src="{% static "img/no_image.png" %}" style="height: 50px; width: 50px;">
+                {% endfor %}
+            {% endwith %}
+            {{ note.name }}
+          </a>
+          {{ note.description|truncatewords:10 }}
       </td></tr>
     {% empty %}
       <tr><td><p>Нет результат соответсвующего Вашему запросу.</p></td></tr>

@@ -6,6 +6,8 @@ app_name = 'classifieds'
 
 urlpatterns = [
     path('', views.note_list, name='note_list'),
+    path('about-us/', views.about_us, name='about_us'),
+    path('contacts/', views.contacts, name='contacts'),
     path('search/', views.note_search, name='note_search'),
     path('list-user/<int:user_id>/', views.note_list_of_user, name='note_list_of_user'),
     path('create-note/', views.create_note, name='create_note'),

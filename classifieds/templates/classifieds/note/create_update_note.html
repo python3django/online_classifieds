@@ -74,8 +74,8 @@ var subcategory = {{ subcategory_js }};
 
 
 
-var makeRelationCategorys = (function () {
 /* Создаем связанные поля select для rubric и category */
+var makeRelationCategorys = (function () {
     function change(slave, data){
       var x, dataArray, option;
       slave.innerHTML = "";
@@ -104,8 +104,8 @@ makeRelationCategorys(document.getElementById("selectRubric"), document.getEleme
 
 
 
-var makeRelationSubcategorys = (function () {
 /* Создаем связанные поля select для category и subcategory */
+var makeRelationSubcategorys = (function () {
     function change(slave, data){
       var x, dataArray, option;
       slave.innerHTML = "";
@@ -252,6 +252,47 @@ cbimg4.addEventListener('change', (event) => {
   }; 
 });
 
+
 </script>
 {% endblock %}
+
+
+
+
+
+
+/* Делаем поля "Сделать основным изображением" типа "checkbox"
+похожими по функционалу на тип "radio", когда выделение одного поля
+снимает флажок с другого. Выделить можно только одно поле.
+*/
+const cbimg0 = document.getElementById("id_images-0-main");
+const cbimg1 = document.getElementById("id_images-1-main");
+const cbimg2 = document.getElementById("id_images-2-main");
+const cbimg3 = document.getElementById("id_images-3-main");
+const cbimg4 = document.getElementById("id_images-4-main");
+
+var cbimgs = [cbimg0, cbimg1, cbimg2, cbimg3, cbimg4];
+
+function cbImgSelect(cbimgs) {
+    for (var i = 0; i < 5; i++) {
+        cbimgs[i].addEventListener('change', (event) => {
+            if (event.target.checked) {
+                for (var j = 0; j < 5; j++) {
+                    if (j == i) {
+                        cbimgs[j].checked = true;
+                    } else {
+                        cbimgs[j].checked = false;
+                    };
+                };
+            };
+        });
+    };
+};
+
+cbImgSelect(cbimgs);
+
+
+
+
+
 

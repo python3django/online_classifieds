@@ -1,9 +1,30 @@
 @import url(http://fonts.googleapis.com/css?family=Ubuntu);
+/*
+html {
+  height: 100%;
+}
+*/
+html, body {
+    height: 100%;
+    margin: 0;
+   }
+
+.wrapper {
+    min-height: 100%;
+    /* Равно высоте подвала, */
+    /* но с учётом margin-bottom у последнего дочернего элемента */
+    margin-bottom: -50px;
+   }
+
+.push {
+    height: 50px;
+   }
 
 body { 
     margin:0;
     padding:0;
-    font-family:helvetica, sans-serif; 
+    font-family:helvetica, sans-serif;
+    height: 100%;
 }
 
 h1, h2, h3, h4, h5 , h6 { 
@@ -98,6 +119,14 @@ form p input {
     border-radius:4px;
 }
 
+#search form p label{
+    font-size:20px;
+}
+
+#search form p input{
+    font-size:20px;
+}
+
 ul.errorlist {
    float:left;
    color:#ff0000;
@@ -107,7 +136,7 @@ ul.errorlist {
    padding:0;
 }
 
-
+/*
 #header {
     padding:10px 100px;
     font-size:18px;
@@ -133,6 +162,7 @@ ul.errorlist {
     float:right;
     padding-top:4px;
 }
+*/
 
 #content {
     padding:0 10px;
@@ -339,6 +369,31 @@ ul.errorlist {
     padding-top:4px;
 }
 
+/*footer*/
+#footer {  
+    height: 50px;
+    padding:10px 100px;
+    font-size:18px;
+    background:#5993bb;
+    color:#fff;
+    overflow:auto;
+}
+
+#footer .data {
+    font-family: 'Muli', sans-serif;
+    float:left;
+    color:#f3f7cc;
+    font-size:20px;
+    margin-right:10%;
+}
+
+#footer a {
+    color:#f3f7cc;
+}
+
+#footer a:hover {
+    color:#fff;
+}
 
 /* messages */
 ul.messages {

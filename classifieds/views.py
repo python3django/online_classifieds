@@ -10,6 +10,15 @@ from django.contrib.auth.models import User
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
 
 
+
+def about_us(request):
+    return render(request, 'classifieds/note/about_us.html')
+
+
+def contacts(request):
+    return render(request, 'classifieds/note/contacts.html')
+
+
 def note_search(request):
     form = SearchForm()
     query = None
