@@ -48,7 +48,7 @@ def note_list(request):
     rubrics = Rubric.objects.all()
     notes = Note.objects.filter(is_active=True)
 
-    paginator = Paginator(notes, 12) # 3 сообщения на каждой странице 
+    paginator = Paginator(notes, 6) # 3 сообщения на каждой странице 
     page = request.GET.get('page') 
     try: 
         notes = paginator.page(page) 
