@@ -30,7 +30,7 @@ class ImageInline(admin.TabularInline):
 
 @admin.register(Note)
 class NoteAdmin(admin.ModelAdmin):
-    list_display = ['id', 'name', 'subcategory', 'price', 'is_active', 'created', 'updated']
+    list_display = ['user', 'name', 'subcategory', 'price', 'is_active', 'created']
     list_display_links = ['name']
     list_filter = ['is_active', 'created', 'updated']
     list_editable = ['price', 'is_active']
