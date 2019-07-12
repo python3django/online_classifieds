@@ -6,36 +6,39 @@
 {% endblock %}
 
 {% block content %}
-  
-  <div id="main" class="note-list">
-    <h1>
-        {% if note_user %}
-            Объявления пользователя {{ note_user }}
-        {% else %}
-            Такого пользователя не существует!
-        {% endif %}
-    </h1>
-    {% for note in notes %}
-      <div class="item">
-        <a href="{{ note.get_absolute_url }}">
-          {% with note.images.all as imgs %}
-            {% for image in imgs|dictsortreversed:"main" %}
-                {% if forloop.first %}
-                    <img src="{{ image.get_absolute_url }}" style="height: 100px; width: 100px;">
-                {% endif %}
-            {% empty %}
-                <img src="{% static "img/no_image.png" %}" style="height: 100px; width: 100px;">
-            {% endfor %}
-          {% endwith %}
-        </a><br>
-        <span>{{ note.updated|date:"j M Y" }}</span><br>
-        <span>{{ note.updated|time }}</span><br>
-        <a href="{{ note.get_absolute_url }}">{{ note.name|truncatechars:11 }}</a><br>
-        ${{ note.price }}
-      </div>
-    {% endfor %}
+<div id="user-list-note">
+  <div id="main" class="note-list">  
+    <div class="main-title">
+        <h1>
+            {% if note_user %}
+                Объявления пользователя {{ note_user }}
+            {% else %}
+                Такого пользователя не существует!
+            {% endif %}
+        </h1>
+    </div>
+        <div class="notes">
+        {% for note in notes %}
+          <div class="item">
+            <a href="{{ note.get_absolute_url }}">
+              {% with note.images.all as imgs %}
+                {% for image in imgs|dictsortreversed:"main" %}
+                    {% if forloop.first %}
+                        <img src="{{ image.get_absolute_url }}" style="height: 100px; width: 100px;">
+                    {% endif %}
+                {% empty %}
+                    <img src="{% static "img/no_image.png" %}" style="height: 100px; width: 100px;">
+                {% endfor %}
+              {% endwith %}
+            </a><br>
+            <span>{{ note.updated|date:"j M Y" }}</span><br>
+            <span>{{ note.updated|time }}</span><br>
+            <a href="{{ note.get_absolute_url }}">{{ note.name|truncatechars:11 }}</a><br>
+            ${{ note.price }}
+          </div>
+        {% endfor %}
+        </div>
+      {% include "pagination.html" with page=notes %}
   </div>
-  
-  {% include "pagination.html" with page=notes %}
-
+</div>
 {% endblock %}

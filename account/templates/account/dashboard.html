@@ -3,10 +3,12 @@
 {% block title %}Моя страничка{% endblock %}
 
 {% block content %}
+<div id="dashboard">
+  <div>  
   <h1>Моя страница</h1>
   <p>Добро пожаловать на вашу страничку. Вы можете <a href="{% url "edit" %}">редектировать ваш профиль</a> 
 или <a href="{% url "password_change" %}">изменить ваш пароль</a>.</p>
-
+  </div>
   <div>
     <h2><a href="{% url "classifieds:create_note" %}">Создать новое объявление</a></h2>
     <table>
@@ -21,4 +23,5 @@
     {% endfor %}
     </table>
   </div>
+</div>
 {% endblock %}

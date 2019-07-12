@@ -144,7 +144,7 @@ def note_detail(request, id, slug):
 def note_list_of_user(request, user_id):
     notes = Note.objects.filter(user=user_id).filter(is_active=True)
 
-    paginator = Paginator(notes, 15) # 3 сообщения на каждой странице 
+    paginator = Paginator(notes, 7) #  сообщения на каждой странице 
     page = request.GET.get('page') 
     try: 
         notes = paginator.page(page) 

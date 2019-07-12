@@ -1,31 +1,4 @@
 @import url(http://fonts.googleapis.com/css?family=Ubuntu);
-/*
-html {
-  height: 100%;
-}
-*/
-html, body {
-    height: 100%;
-    margin: 0;
-   }
-
-.wrapper {
-    min-height: 100%;
-    /* Равно высоте подвала, */
-    /* но с учётом margin-bottom у последнего дочернего элемента */
-    margin-bottom: -50px;
-   }
-
-.push {
-    height: 50px;
-   }
-
-body { 
-    margin:0;
-    padding:0;
-    font-family:helvetica, sans-serif;
-    height: 100%;
-}
 
 h1, h2, h3, h4, h5 , h6 { 
     font-family: 'Ubuntu', sans-serif; font-weight:normal;
@@ -119,14 +92,6 @@ form p input {
     border-radius:4px;
 }
 
-#search form p label{
-    font-size:20px;
-}
-
-#search form p input{
-    font-size:20px;
-}
-
 ul.errorlist {
    float:left;
    color:#ff0000;
@@ -134,85 +99,6 @@ ul.errorlist {
    font-size:13px;
    margin:0; 
    padding:0;
-}
-
-/*
-#header {
-    padding:10px 100px;
-    font-size:18px;
-    overflow:auto;
-}
-
-#subheader {
-    background:#ececec;
-    color:#444;
-    padding:15px 100px;
-    overflow:auto;
-}
-
-#header .logo {
-    font-family: 'Ubuntu', sans-serif;
-    float:left;
-    color:#333;
-    font-size:22px;
-    margin-right:10%;
-}
-
-#subheader .cart {
-    float:right;
-    padding-top:4px;
-}
-*/
-
-#content {
-    padding:0 10px;
-    overflow:hidden;
-}
-
-#sidebar {
-    width:220px;
-    padding:20px 10px 0 0;
-    float:left;
-}
-
-#sidebar ul{
-    margin:0;
-    padding:0;
-}
-
-#sidebar ul li {
-    margin:0;
-    list-style:none;
-    padding:10px 14px;
-}
-
-#sidebar ul li a {
-    display:block;
-}
-
-#sidebar ul li.selected {
-    background:#5993bb;
-    border-radius:4px;
-}
-
-#sidebar ul li.selected a {
-    color:#fff;
-}
-
-#bar-right { 
-    float:right;
-    width:200px;
-    padding:20px 10px 0px 0px;
-    background:#efefef;
-    height:100vh;
-}
-
-
-#main {
-    float:left;
-    width: 96%;
-    margin-right:-220px;
-    overflow:hidden;
 }
 
 #formset tbody tr:nth-child(-n + 3) {
@@ -241,13 +127,10 @@ ul.errorlist {
 }
 
 .note-list .item {
-    width:20vw;
     padding:30px 10px 10px 10px;
-    float:left;
     text-align:center;
     line-height:1.2;
     border: 1px solid #efefef;
-    /*outline: 1px solid #efefef;*/
     margin: auto;
 }
 
@@ -257,9 +140,9 @@ ul.errorlist {
 }
 
 .note-detail {
-    text-align:justify;
+    text-align:left;
     padding:10px 20px 20px 0;
-    margin-left: 20px;
+    margin-left: 50px;
 }
 
 .note-detail .price {
@@ -269,14 +152,9 @@ ul.errorlist {
 }
 
 .note-detail img {
-    width:40%;
-    float:left;
     padding:0 20px 20px 0;
 }
 
-.note-detail #large{
-    float:left;
-}
 
 .note-detail h1 {
     margin-bottom:0;
@@ -290,59 +168,47 @@ ul.errorlist {
     color:#dc1616;
 }
 
-.languages {
-   float:right;
-   padding-top:4px;
-   font-size:14px;
+/*gird*/
+
+body {
+    display: grid;
+    grid-template-areas:
+    "header header"
+    "messages messages"
+    "content ads"
+    "footer footer";
+    grid-template-rows: 60px 50px 1fr 60px;
+    grid-template-columns: 1fr 15%;
+    height: 100vh;
+    margin: 0;
+    font-family:helvetica, sans-serif;
 }
 
-.languages ul {
-    list-style:none;
-    margin:0;
-    padding:0;
-    float:left;
-}
-
-.languages ul li {
-    float:left;
-    margin:0 0 0 10px;
-    font-size:14px;
-}
-
-.languages p {
-    float:left;
-    margin:0;
-}
-
-
-/* pagination */
-.pagination { 
-    margin:40px 0; 
-    font-weight:bold;
-    text-align: center;    
+/*header*/
+#header {
+    grid-area: header;
+    display: grid;
+    grid-auto-flow: column;
 }
 
 #header {
-    padding:10px 100px;
+    padding:10px 50px;
     font-size:18px;
-    /*background:#12c064;*/
     background:#5993bb;
     color:#fff;
-    /*border-bottom:4px solid #1cdf78;*/
     overflow:auto;
 }
 
 #header .logo {
     font-family: 'Muli', sans-serif;
-    float:left;
     color:#f3f7cc;
     font-size:20px;
     margin-right:10%;
+    text-align: left;
 }
 
 #header ul.menu {
     list-style:none;
-    float:left;
     margin:0;
     padding:0;
 }
@@ -367,40 +233,18 @@ ul.errorlist {
 #header .user {
     float:right;
     padding-top:4px;
+    text-align: right;
 }
 
-/*footer*/
-#footer {  
-    height: 50px;
-    padding:10px 100px;
-    font-size:18px;
-    background:#5993bb;
-    color:#fff;
-    overflow:auto;
-}
-
-#footer .data {
-    font-family: 'Muli', sans-serif;
-    float:left;
-    color:#f3f7cc;
-    font-size:20px;
-    margin-right:10%;
-}
-
-#footer a {
-    color:#f3f7cc;
-}
-
-#footer a:hover {
-    color:#fff;
-}
-
-/* messages */
+/*messages*/
 ul.messages {
-    margin:10px 100px;
+    grid-area: messages;
+}
+
+ul.messages {
+    margin:0px 30px;
     padding:0;
-    list-style-type:
-    none;
+    list-style-type: none;
 }
 ul.messages li.success,
 ul.messages li.warning,
@@ -426,9 +270,186 @@ ul.messages li.warning a { color:#f49000; }
 
 ul.messages li a.close {
     margin:0;
-    float:right;
     opacity:1;
     border:0;
     box-shadow:none;
     text-shadow:none;
 }
+
+/*content*/
+#content {
+    grid-area: content;
+    margin: 20px;
+}
+
+/*bar-right*/
+#bar-right {
+    grid-area: ads;
+    display: grid;
+    grid-auto-flow: row;
+    padding:20px 10px 0px 0px;
+    background:#efefef;
+}
+
+/*footer*/
+#footer {  
+    grid-area: footer;
+    display: grid;
+    grid-auto-flow: column;
+    padding:10px 50px;
+    font-size:18px;
+    background:#5993bb;
+    color:#fff;
+}
+
+#footer .data {
+    font-family: 'Muli', sans-serif;
+    color:#f3f7cc;
+    font-size:20px;
+    margin-right:10%;
+}
+
+#footer a {
+    color:#f3f7cc;
+}
+
+#footer a:hover {
+    color:#fff;
+}
+
+/*content-list*/
+#content-list {
+    display: grid;
+    grid-template-columns: 25% 1fr;        
+    padding: 0 10px;
+}
+
+/*content-list > sidebar*/
+#sidebar {
+    padding:20px 10px 0 0;
+}
+
+#sidebar ul{
+    margin:0;
+    padding:0;
+}
+
+#sidebar ul li {
+    margin:0;
+    list-style:none;
+    padding:10px 14px;
+}
+
+#sidebar ul li a {
+    display:block;
+}
+
+#sidebar ul li.selected {
+    background:#5993bb;
+    border-radius:4px;
+}
+
+#sidebar ul li.selected a {
+    color:#fff;
+}
+
+/*content-list > main*/
+#main {
+    display: grid;
+    grid-template-areas:
+        "main-title"
+        "notes"
+        "pagination";
+    grid-template-rows: 60px 1fr 120px;
+}
+
+#main .main-title {
+    grid-area: main-title;
+    text-align: center;
+}
+
+#main .notes {
+    grid-area: notes;
+    display: grid;
+    /*grid-template-columns: 1fr 1fr 1fr;*/
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    grid-auto-rows: 250px;
+}
+
+/* pagination */
+.pagination {
+    grid-area: pagination;
+    margin:40px 0px; 
+    font-weight:bold;
+    text-align: center; 
+}
+
+/*content-detail*/
+#content-detail {
+    display: grid;
+    grid-auto-rows: auto;
+    text-align: center;
+}
+
+#content-detail #largeImg {
+    width: 65%;
+}
+
+#content-detail #largeNoImg {
+    width: 65%;
+}
+
+#content-detail #thumbs {
+    margin-top: 20px;
+}
+
+/*search*/
+#search {
+    display: grid;
+    grid-auto-rows: auto;
+}
+
+#search form p label{
+    font-size:20px;
+}
+
+#search form p input{
+    font-size:20px;
+}
+
+
+/*user-list-note*/
+#user-list-note {
+    display: grid;
+    grid-template-columns: 1fr;
+    padding: 0 10px;
+}
+
+/*dashboard*/
+#dashboard {
+    display: grid;
+    grid-auto-rows: auto;
+}
+
+/*account-edit*/
+#account-edit {
+    display: grid;
+    grid-auto-rows: auto;
+}
+
+
+
+/*media*/
+@media all and (max-width: 575px) {
+    body {
+    grid-template-areas:
+        "header"
+        "messages"
+        "content"
+        "ads"
+        "footer";
+    grid-template-rows: 100px 80px 1fr 150px 70px;
+    grid-template-columns: 1fr;
+    }
+}
+

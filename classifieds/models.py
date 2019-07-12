@@ -102,7 +102,8 @@ class Image(models.Model):
         return "{0}".format(self.image.url)
 
     def image_img(self):
-        return mark_safe(u'<a href="{0}"><img src="{0}" style="height: 50px; width: 50px;"></a>'.format(self.image.url))
+        return mark_safe(
+            u'<a href="{0}"><img src="{0}" style="height: 50px; width: 50px;"></a>'.format(self.image.url))
 
     def save(self, *args, **kwargs):
         # Сначала - обычное сохранение

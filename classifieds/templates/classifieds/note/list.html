@@ -6,6 +6,7 @@
 {% endblock %}
 
 {% block content %}
+<div id="content-list">
   <div id="sidebar">
     <h3>Рубрики</h3>
     <ul>
@@ -45,7 +46,8 @@
   </div>
 
   <div id="main" class="note-list">
-    <h1>
+    <div class="main-title">
+        <h2>
         {% if rubric %}
             <a href="{{ rubric.get_absolute_url }}">{{ rubric.name }}</a>
             {% if category %}
@@ -54,8 +56,12 @@
                     &rarr;<a href="{{ subcategory.get_absolute_url }}">{{ subcategory.name }}</a>
                 {% endif %}
             {% endif %}
+        {% else %} 
+            Все объявления
         {% endif %}
-    </h1>
+        </h2>
+    </div>
+    <div class="notes">
     {% for note in notes %}
       <div class="item">
         <a href="{{ note.get_absolute_url }}">
@@ -75,8 +81,8 @@
         ${{ note.price }}
       </div>
     {% endfor %}
+    </div>
+    {% include "pagination.html" with page=notes %}
   </div>
-  
-  {% include "pagination.html" with page=notes %}
-
+</div>  
 {% endblock %}

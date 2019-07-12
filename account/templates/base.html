@@ -19,10 +19,7 @@
 		</ul>
 	  {% endif %}
       
-      <span class="logo"><a href="{% url "classifieds:note_search" %}">
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        Поиск
-      </a></span>
+      <span class="logo"><a href="{% url "classifieds:note_search" %}">Поиск</a></span>
 
 	  <span class="user">
 		{% if request.user.is_authenticated %}
@@ -42,17 +39,18 @@
         {% endfor %}
       </ul>
     {% endif %}
-<div class="wrapper">
-  <div id="bar-right">
-    <p>Правая панель (место для рекламы)</p>
-  </div>
 
   <div id="content">
     {% block content %}
     {% endblock %}
   </div>
-  <div class="push"></div>
-</div>
+  <div id="bar-right">
+    <div>Реклама</div>
+    <div>Реклама</div>
+    <div>Реклама</div>
+    <div>Реклама</div>
+    <div>Реклама</div>
+  </div>
   <div id="footer">    
     <span class="data"><a href="{% url "classifieds:about_us" %}">О нас</a></span>
     <span class="data"><a href="{% url "classifieds:contacts" %}">Конткты</a></span>

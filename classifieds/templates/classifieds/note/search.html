@@ -4,52 +4,55 @@
 {% block title %}Поиск{% endblock %}
 
 {% block content %}
-  <div id="search">
+<div id="search">
+  <div id="search-form">
     <h1>Поиск по объявлениям</h1>
     <form action="." method="get">
       {{ form.as_p }}
       <p><input type="submit" value="Искать"></p>
     </form>
   </div>
-    <br><br><br><br><br><br><br><br>
-  <hr size="2px" color="#5993bb">
-  <div>
-  {% if query %}
-    <h1>Объявления содержащие "{{ query }}"</h1>
-    <h3>
-      {% with results.count as total_results %}
-          Найдено {{ total_results }} 
-        {% if total_results == 1 %}
-            результат
-        {% elif total_results >= 2 and total_results <= 4%}
-            результата
-        {% else %}
-            результатов
-        {% endif %}
-      {% endwith %}
-    </h3>
-  <table>
-    {% for note in results %}
-      <tr><td>
-          <a href="{{ note.get_absolute_url }}">
-            {% with note.images.all as imgs %}
-                {% for image in imgs|dictsortreversed:"main" %}
-                    {% if forloop.first %}
-                        <img src="{{ image.get_absolute_url }}" style="height: 50px; width: 50px;">
-                    {% endif %}
-                {% empty %}
-                    <img src="{% static "img/no_image.png" %}" style="height: 50px; width: 50px;">
-                {% endfor %}
-            {% endwith %}
-            {{ note.name }}
-          </a>
-          {{ note.description|truncatewords:10 }}
-      </td></tr>
-    {% empty %}
-      <tr><td><p>Нет результат соответсвующего Вашему запросу.</p></td></tr>
-    {% endfor %}
-  </table>
-  {% endif %}
+
+  <div><hr size="2px" color="#5993bb"></div>
+
+  <div id="search-results">
+      {% if query %}
+        <h1 align="center">Объявления содержащие "{{ query }}"</h1>
+        <h3>
+          {% with results.count as total_results %}
+              Найдено {{ total_results }} 
+            {% if total_results == 1 %}
+                результат
+            {% elif total_results >= 2 and total_results <= 4%}
+                результата
+            {% else %}
+                результатов
+            {% endif %}
+          {% endwith %}
+        </h3>
+      <table>
+        {% for note in results %}
+          <tr><td>
+              <a href="{{ note.get_absolute_url }}">
+                {% with note.images.all as imgs %}
+                    {% for image in imgs|dictsortreversed:"main" %}
+                        {% if forloop.first %}
+                            <img src="{{ image.get_absolute_url }}" style="height: 50px; width: 50px;">
+                        {% endif %}
+                    {% empty %}
+                        <img src="{% static "img/no_image.png" %}" style="height: 50px; width: 50px;">
+                    {% endfor %}
+                {% endwith %}
+                {{ note.name }}
+              </a>
+              {{ note.description|truncatewords:10 }}
+          </td></tr>
+        {% empty %}
+          <tr><td><p>Нет результат соответсвующего Вашему запросу.</p></td></tr>
+        {% endfor %}
+      </table>
+      {% endif %}
   </div>
+</div>
 {% endblock %}
 

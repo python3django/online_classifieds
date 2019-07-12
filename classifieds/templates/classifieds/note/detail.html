@@ -6,20 +6,22 @@
 {% endblock %}
 
 {% block content %}
-    <div align="center">
-    <h2>
-        <a href="{{ note.subcategory.category.rubric.get_absolute_url }}">{{ note.subcategory.category.rubric }}</a>&rarr;
-        <a href="{{ note.subcategory.category.get_absolute_url }}">{{ note.subcategory.category }}</a>&rarr;
-        <a href="{{ note.subcategory.get_absolute_url }}">{{ note.subcategory }}</a>        
-    </h2>
-    <h1>{{ note.name }}</h1>
+<div id="content-detail">
+    <div class="title"><h1>{{ note.name }}</h1></div>
+    <div class="breadcrumbs">
+        <h2>
+            <a href="{{ note.subcategory.category.rubric.get_absolute_url }}">
+                {{ note.subcategory.category.rubric }}
+            </a>&rarr;
+            <a href="{{ note.subcategory.category.get_absolute_url }}">{{ note.subcategory.category }}</a>&rarr;
+            <a href="{{ note.subcategory.get_absolute_url }}">{{ note.subcategory }}</a>        
+        </h2>        
     </div>
-  <div class="note-detail">
 
         {% if main_image %}
-            <img id="largeImg" src="{{ main_image.get_absolute_url }}">
+            <div><img id="largeImg" src="{{ main_image.get_absolute_url }}"></div>
         {% else %}
-            <img src="{% static "img/no_image.png" %}">
+            <div><img id="largeNoImg" src="{% static "img/no_image.png" %}"></div>
         {% endif %}   
 
         <div id="thumbs">
@@ -30,8 +32,7 @@
         {% endfor %}   
         </div>
 
-    <div style="clear:both"></div>
-    <div style="clear:left; margin-left:50px;">
+    <div class="note-detail">
         {{ note.updated }}
         <p class="price">${{ note.price }}</p>
         {{ note.description|linebreaks }}
@@ -40,12 +41,16 @@
         <p>email: {{ note.email }}</p>
         <p>messenger: {{ note.messenger }}</p>
     </div>
+
+  <div>
+    <h2>
+    <a href="{% url 'classifieds:note_list_of_user' user_id=note.user.id %}">
+        Показать все объявления пользователя {{ note.user.first_name }}
+    </a>
+    </h2>
   </div>
-    <hr>
-  <div align="center"><h2>
-    <a href="{% url 'classifieds:note_list_of_user' user_id=note.user.id %}">Показать все объявления пользователя {{ note.user.first_name }}</a>
-  </h2></div>
     <br><br><br>
+</div>
 
 <script>
 

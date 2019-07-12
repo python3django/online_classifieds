@@ -3,12 +3,18 @@
 {% block title %}Изменить ваш профиль{% endblock %}
 
 {% block content %}
-  <h1>Изменить ваш профиль</h1>
-  <p>Вы можете редактировать Ваш профиль в следующей форме:</p>
-  <form action="." method="post" enctype="multipart/form-data">
-    {{ user_form.as_p }}
-    {{ profile_form.as_p }}
-    {% csrf_token %}
-    <p><input type="submit" value="Сохранить изменения"></p>
-  </form>
+<div id="account-edit">
+  <div>  
+      <h1>Изменить ваш профиль</h1>
+      <p>Вы можете редактировать Ваш профиль в следующей форме:</p>
+  </div>
+  <div>  
+      <form action="." method="post" enctype="multipart/form-data">
+        {{ user_form.as_p }}
+        {{ profile_form.as_p }}
+        {% csrf_token %}
+        <p><input type="submit" value="Сохранить изменения"></p>
+      </form>
+  </div>
+</div>
 {% endblock %}
