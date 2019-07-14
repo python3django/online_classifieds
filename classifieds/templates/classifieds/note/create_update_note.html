@@ -100,7 +100,12 @@ var makeRelationCategorys = (function() {
         change.call(this, slave, data);}
       master.onchange();}
 })();
-makeRelationCategorys(document.getElementById("selectRubric"), document.getElementById("selectCategory"), categorys);
+
+makeRelationCategorys(
+    document.getElementById("selectRubric"), 
+    document.getElementById("selectCategory"), 
+    categorys
+);
 
 
 
@@ -125,15 +130,19 @@ var makeRelationSubcategorys = (function () {
         change.call(this, slave, data);}
       master.onchange();}
 })();
-makeRelationSubcategorys(document.getElementById("selectCategory"), document.getElementById("selectSubcategory"), subcategorys);
+
+makeRelationSubcategorys(
+    document.getElementById("selectCategory"), 
+    document.getElementById("selectSubcategory"), 
+    subcategorys
+);
 
 
-
-function formSelected (rubric, category, subcategory) {
 /* В зависимости от принадлежности редактируемой записи к той или иной 
 rubric, category и subcategory соответственно инициируем поля select 
 атрибутом selected
 */
+function formSelected (rubric, category, subcategory) {
     selectRubric = document.getElementById("selectRubric");
     selectCategory = document.getElementById("selectCategory");
     selectSubcategory = document.getElementById("selectSubcategory");
@@ -162,14 +171,14 @@ rubric, category и subcategory соответственно инициируе�
         };
     };
 };
+
 formSelected (rubric, category, subcategory);
 
 
-
-function formsetDeleteSelect () {
 /* Если изображение не загружено, то скрываем соответствующие поля формы:
 "Сделать основным изображением" и "Удалить"
 */
+function formsetDeleteSelect () {
     var formsetId = document.getElementById("formset");
     var formsetTrTag = formsetId.getElementsByTagName("tr");
     var idImage = [];
@@ -193,6 +202,7 @@ function formsetDeleteSelect () {
         }
     };
 };
+
 formsetDeleteSelect ();
 
 
@@ -201,95 +211,28 @@ formsetDeleteSelect ();
 похожими по функционалу на тип "radio", когда выделение одного поля
 снимает флажок с другого. Выделить можно только одно поле.
 */
-const cbimg0 = document.getElementById("id_images-0-main");
-const cbimg1 = document.getElementById("id_images-1-main");
-const cbimg2 = document.getElementById("id_images-2-main");
-const cbimg3 = document.getElementById("id_images-3-main");
-const cbimg4 = document.getElementById("id_images-4-main");
+function cbImgSelect(checkBoxImgs) {
+    for (var i = 0; i < checkBoxImgs.length; i++) {
+        checkBoxImgs[i].addEventListener('change', function(event) {
+            if (event.target.checked) {
+                for (var j = 0; j < checkBoxImgs.length; j++) {
+                    if (checkBoxImgs[j] != this) {
+                        checkBoxImgs[j].checked = false;
+                    }
+                }
+            }
+        })
+    }
+};
 
-cbimg0.addEventListener('change', (event) => {
-  if (event.target.checked) {
-    cbimg1.checked = false;
-    cbimg2.checked = false;
-    cbimg3.checked = false;
-    cbimg4.checked = false;
-  }; 
-});
-  
-cbimg1.addEventListener('change', (event) => {
-  if (event.target.checked) {
-    cbimg0.checked = false;
-    cbimg2.checked = false;
-    cbimg3.checked = false;
-    cbimg4.checked = false;
-  }; 
-});
+checkBoxImgs = document.querySelectorAll(
+    '#id_images-0-main, #id_images-1-main, #id_images-2-main, #id_images-3-main, #id_images-4-main'
+);
 
-cbimg2.addEventListener('change', (event) => {
-  if (event.target.checked) {
-    cbimg0.checked = false;
-    cbimg1.checked = false;
-    cbimg3.checked = false;
-    cbimg4.checked = false;
-  }; 
-});
-
-cbimg3.addEventListener('change', (event) => {
-  if (event.target.checked) {
-    cbimg0.checked = false;
-    cbimg1.checked = false;
-    cbimg2.checked = false;
-    cbimg4.checked = false;
-  }; 
-});
-
-cbimg4.addEventListener('change', (event) => {
-  if (event.target.checked) {
-    cbimg0.checked = false;
-    cbimg1.checked = false;
-    cbimg2.checked = false;
-    cbimg3.checked = false;
-  }; 
-});
-
+cbImgSelect(checkBoxImgs);
 
 </script>
 {% endblock %}
-
-
-
-
-
-
-/* Делаем поля "Сделать основным изображением" типа "checkbox"
-похожими по функционалу на тип "radio", когда выделение одного поля
-снимает флажок с другого. Выделить можно только одно поле.
-*/
-const cbimg0 = document.getElementById("id_images-0-main");
-const cbimg1 = document.getElementById("id_images-1-main");
-const cbimg2 = document.getElementById("id_images-2-main");
-const cbimg3 = document.getElementById("id_images-3-main");
-const cbimg4 = document.getElementById("id_images-4-main");
-
-var cbimgs = [cbimg0, cbimg1, cbimg2, cbimg3, cbimg4];
-
-function cbImgSelect(cbimgs) {
-    for (var i = 0; i < 5; i++) {
-        cbimgs[i].addEventListener('change', (event) => {
-            if (event.target.checked) {
-                for (var j = 0; j < 5; j++) {
-                    if (j == i) {
-                        cbimgs[j].checked = true;
-                    } else {
-                        cbimgs[j].checked = false;
-                    };
-                };
-            };
-        });
-    };
-};
-
-cbImgSelect(cbimgs);
 
 
 
