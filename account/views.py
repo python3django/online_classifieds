@@ -4,15 +4,14 @@ from .forms import UserRegistrationForm, UserEditForm, ProfileEditForm
 from django.contrib import messages
 from classifieds.models import Note
 from .models import Profile
-
 from django.http import HttpResponse
 from django.contrib.sites.shortcuts import get_current_site
-from django.utils.encoding import force_bytes, force_text
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.template.loader import render_to_string
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_decode
 from .token_generator import account_activation_token
 from django.contrib.auth.models import User
-from django.core.mail import EmailMessage
+from .tasks import register_token
+
 
 
 @login_required
@@ -32,17 +31,9 @@ def register(request):
             new_user.is_active = False
             # Save the User object
             new_user.save()
+            # launch asynchronous task
             current_site = get_current_site(request)
-            email_subject = 'Activate Your Account'
-            message = render_to_string('account/activate_account.html', {
-                'user': new_user,
-                'domain': current_site.domain,
-                'uid': urlsafe_base64_encode(force_bytes(new_user.pk)),
-                'token': account_activation_token.make_token(new_user),
-            })
-            to_email = user_form.cleaned_data.get('email')
-            email = EmailMessage(email_subject, message, to=[to_email])
-            email.send()
+            register_token.delay(new_user.pk, current_site.domain)
             return render(request, 'account/sent_activation_link.html')            
     else:
         user_form = UserRegistrationForm()
