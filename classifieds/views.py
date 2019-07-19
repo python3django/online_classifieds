@@ -8,7 +8,9 @@ import json
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.models import User
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
-
+from ratelimit.decorators import ratelimit
+from ratelimit.exceptions import Ratelimited
+from django.http import HttpResponse
 
 
 def about_us(request):
@@ -27,13 +29,6 @@ def note_search(request):
         form = SearchForm(request.GET)
         if form.is_valid():
             query = form.cleaned_data['query']
-            #results = Note.objects.annotate(search=SearchVector('name', 'description'),).filter(search=query)
-
-            #search_vector = SearchVector('name', 'description')
-            #search_query = SearchQuery(query)
-            #results = Note.objects.annotate(search=search_vector, rank=SearchRank(search_vector, search_query)
-            #).filter(search=search_query).order_by('-rank')
-
             search_vector = SearchVector('name', weight='A') + SearchVector('description', weight='B')
             search_query = SearchQuery(query)
             results = Note.objects.annotate(
@@ -165,7 +160,16 @@ def note_list_of_user(request, user_id):
     return render(request, 'classifieds/note/list_note_user.html', context)
 
 
+# Обрабатываем исключение если превышен лимит на создание объявлений
+def handler403(request, exception=None):
+    if isinstance(exception, Ratelimited):
+        return HttpResponse('<h2>Вы превысели лимит! Попробуйте сделать это позже.</h2>', status=429)
+    return HttpResponseForbidden('Forbidden 403')
+
+
 @login_required
+# ограничиваем количество создаваемых пользователем объявлений 1-м в минуту
+@ratelimit(key='user', rate='1/m', method=['POST'], block=True)
 def create_note(request):
     if request.method == 'POST':
         form_note = CreateNote(request.POST)
@@ -272,7 +276,6 @@ def update_note(request, id=id):
                 'category_js': category_js,
                 'note': note
     }
-    print('note: ', note.user)
     return render(request, 'classifieds/note/create_update_note.html', context)
 
 

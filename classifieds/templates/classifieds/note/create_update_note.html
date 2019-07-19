@@ -16,6 +16,7 @@
   {% if request.user.is_authenticated %}
     {% if request.user and not note %}
       <h2 id="form_title">Создать новое объявление</h2>
+      <p style="color: red">*Вы можете создать не более 1 объявления в минуту</p>
     {% elif request.user == note.user %}
       <h2 id="form_title">Редактировать объявление</h2>
     {% elif request.user != note.user %}

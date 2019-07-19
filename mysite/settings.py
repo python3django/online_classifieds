@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'classifieds.apps.ClassifiedsConfig',
     'django.contrib.postgres',
+    'ratelimit',
 ]
 
 MIDDLEWARE = [
@@ -156,3 +157,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 #EMAIL_PORT = 587
 #EMAIL_USE_TLS = True
 
+
+# RATELIMIT SETTINGS
+RATELIMIT_ENABLE = True
+RATELIMIT_USE_CACHE = 'default'

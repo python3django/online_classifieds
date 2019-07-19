@@ -23,16 +23,16 @@ JavaScript (на клиентской стороне).
 В Linux создать б.д. можно следующим способом:  
 (PostgreSQL должен быть уже установлен и исправно функционировать)  
 - В консоли следующей коммандой создаем бд:  
-    sudo -u postgres createdb dbame  
+    **sudo -u postgres createdb dbame**  
     (dbame - здесь должно быть имя которым Вы назовете Вашу бд)  
 - Подключаемся к PostgreSQL:  
-    sudo -u postgres psql  
+    **sudo -u postgres psql**  
 - Создаем Вашего username с соответсвующим 'password':  
-    CREATE ROLE username WITH LOGIN PASSWORD 'password';  
+    **CREATE ROLE username WITH LOGIN PASSWORD 'password';**  
 - Даем все привелегии на dbame созданному ранее username:  
-    GRANT ALL PRIVILEGES ON DATABASE dbame TO username;  
+    **GRANT ALL PRIVILEGES ON DATABASE dbame TO username;**  
 - Даем нашему username право создавать новые бд (нужно будет для тестов):  
-    ALTER USER username CREATEDB;  
+    **ALTER USER username CREATEDB;**  
 
 #### Загрузка демонстрационного дампа базы данных
 В демонстрационно-тестовых целях создан небольшой дамп базы данных,  
@@ -57,6 +57,13 @@ id существующих у Вас пользователей.
 **celery -A mysite worker -l info**  
 Отслеживать выполняемые асинхронные задачи можно  
 с помощью Flower - это веб-инструмент для мониторинга Celery.  
+
+#### django-ratelimit  
+При помощи этой программы устанавливаем лимит на количество создаваемых  
+пользователем объявлений в минуту. Это нужно чтобы защитить сайт от  
+возможных действий злоумышлинников, направленных на автоматическое  
+создание огромного количества "фейковых" объявлений, с целью негативно  
+повлиять на работу сайта.  
 
 
 
