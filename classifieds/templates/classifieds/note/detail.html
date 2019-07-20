@@ -37,9 +37,8 @@
         <p class="price">${{ note.price }}</p>
         {{ note.description|linebreaks }}
         <p>{{ note.user.first_name }}</p>
-        <p>phone: {{ note.phone }}</p>
-        <p>email: {{ note.email }}</p>
-        <p>messenger: {{ note.messenger }}</p>
+        <input id="button-user-contact-details" type="button" value="Показать контактные данные"/>
+        <div id="display-user-contact-details"></div>
     </div>
 
   <div>
@@ -54,6 +53,7 @@
 
 <script>
 
+    /* функция для работы с картинками */
     let large = document.getElementById('largeImg');
     var thumbs = document.getElementById('thumbs');
 
@@ -78,6 +78,22 @@
       img.src = url;
     }
 
+
+    /* прячем контактные данные пользователя в javaScript, 
+    чтобы защитить их от программ собирающих данные на страницах */
+    var phone = "{{ note.phone }}";
+    var email = "{{ note.email }}";
+    var messenger = "{{ note.messenger }}";
+
+    document.getElementById("button-user-contact-details").onclick = function() {
+
+        var contact = "";
+        if( phone ) { contact = "<p>phone: " + phone + "</p>" };
+        if( email ) { contact += "<p>email: " + email + "</p>" };
+        if( messenger ) { contact += "<p>messenger: " + messenger + "</p>" };
+
+        document.getElementById("display-user-contact-details").innerHTML = contact;
+    }
   </script>
 {% endblock %}
 
