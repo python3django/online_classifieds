@@ -337,7 +337,7 @@ ul.messages li a.close {
 #sidebar ul li {
     margin:0;
     list-style:none;
-    padding:10px 14px;
+    padding:10px 10px;
 }
 
 #sidebar ul li a {
@@ -451,5 +451,24 @@ ul.messages li a.close {
     grid-template-rows: 100px 80px 1fr 150px 70px;
     grid-template-columns: 1fr;
     }
+}
+
+
+/* tooltip - всплывающая подсказка при наведении на элемент меню */
+.tooltip {
+      position: fixed;
+      z-index: 100;
+      /* подсказка должна перекрывать другие элементы */
+
+      padding: 10px 20px;
+      /* красивости... */
+
+      border: 1px solid #b3c9ce;
+      border-radius: 4px;
+      text-align: center;
+      font: italic 14px/1.3 sans-serif;
+      color: #333;
+      background: #fff;
+      box-shadow: 3px 3px 3px rgba(0, 0, 0, .3);
 }
 

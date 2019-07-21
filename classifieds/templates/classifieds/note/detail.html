@@ -38,7 +38,7 @@
         {{ note.description|linebreaks }}
         <p>{{ note.user.first_name }}</p>
         <input id="button-user-contact-details" type="button" value="Показать контактные данные"/>
-        <div id="display-user-contact-details"></div>
+        <div id="show-user-contact-details"></div>
     </div>
 
   <div>
@@ -92,7 +92,7 @@
         if( email ) { contact += "<p>email: " + email + "</p>" };
         if( messenger ) { contact += "<p>messenger: " + messenger + "</p>" };
 
-        document.getElementById("display-user-contact-details").innerHTML = contact;
+        document.getElementById("show-user-contact-details").innerHTML = contact;
     }
   </script>
 {% endblock %}
