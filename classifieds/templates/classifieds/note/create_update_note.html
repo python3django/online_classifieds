@@ -64,8 +64,10 @@
     {% endif %}
   {% endif %}
   </div>
+{% endblock %}
 
-<script>
+{% block js %}
+<script type="text/javascript">
 
 var categorys = {{ categorys_js|safe }};
 var subcategorys = {{ subcategorys_js|safe }};
@@ -144,7 +146,7 @@ makeRelationSubcategorys(
 rubric, category и subcategory соответственно инициируем поля select 
 атрибутом selected
 */
-function formSelected (rubric, category, subcategory) {
+function changeSelectedForm (rubric, category, subcategory) {
     selectRubric = document.getElementById("selectRubric");
     selectCategory = document.getElementById("selectCategory");
     selectSubcategory = document.getElementById("selectSubcategory");
@@ -174,14 +176,14 @@ function formSelected (rubric, category, subcategory) {
     };
 };
 
-formSelected (rubric, category, subcategory);
+changeSelectedForm (rubric, category, subcategory);
 
 
 
-/* Если изображение не загружено, то скрываем соответствующие поля формы:
+/* Если user не загрузил изображение, то скрываем соответствующие поля формы:
 "Сделать основным изображением" и "Удалить"
 */
-function formsetDeleteSelect () {
+function deleteSelectFormset () {
     var formsetId = document.getElementById("formset");
     var formsetTrTag = formsetId.getElementsByTagName("tr");
     var idImage = [];
@@ -206,7 +208,7 @@ function formsetDeleteSelect () {
     };
 };
 
-formsetDeleteSelect ();
+deleteSelectFormset ();
 
 
 
@@ -214,13 +216,13 @@ formsetDeleteSelect ();
 похожими по функционалу на тип "radio", когда выделение одного поля
 снимает флажок с другого. Выделить можно только одно поле.
 */
-function cbImgSelect(checkBoxImgs) {
-    for (var i = 0; i < checkBoxImgs.length; i++) {
-        checkBoxImgs[i].addEventListener('change', function(event) {
+function changeCheckBox(elemsCheckBoxImage) {
+    for (var i = 0; i < elemsCheckBoxImage.length; i++) {
+        elemsCheckBoxImage[i].addEventListener('change', function(event) {
             if (event.target.checked) {
-                for (var j = 0; j < checkBoxImgs.length; j++) {
-                    if (checkBoxImgs[j] != this) {
-                        checkBoxImgs[j].checked = false;
+                for (var j = 0; j < elemsCheckBoxImage.length; j++) {
+                    if (elemsCheckBoxImage[j] != this) {
+                        elemsCheckBoxImage[j].checked = false;
                     }
                 }
             }
@@ -228,11 +230,11 @@ function cbImgSelect(checkBoxImgs) {
     }
 };
 
-checkBoxImgs = document.querySelectorAll(
+elemsCheckBoxImage = document.querySelectorAll(
     '#id_images-0-main, #id_images-1-main, #id_images-2-main, #id_images-3-main, #id_images-4-main'
 );
 
-cbImgSelect(checkBoxImgs);
+changeCheckBox(elemsCheckBoxImage);
 
 </script>
 {% endblock %}

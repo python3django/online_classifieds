@@ -50,8 +50,10 @@
   </div>
     <br><br><br>
 </div>
+{% endblock %}
 
-<script>
+{% block js %}
+  <script type="text/javascript">
 
     /* функция для работы с картинками */
     let large = document.getElementById('largeImg');
@@ -79,8 +81,9 @@
     }
 
 
+
     /* прячем контактные данные пользователя в javaScript, 
-    чтобы защитить их от программ собирающих данные на страницах */
+    чтобы защитить их от программ собирающих данные со страниц */
     var phone = "{{ note.phone }}";
     var email = "{{ note.email }}";
     var messenger = "{{ note.messenger }}";
@@ -93,6 +96,7 @@
         if( messenger ) { contact += "<p>messenger: " + messenger + "</p>" };
 
         document.getElementById("show-user-contact-details").innerHTML = contact;
+        document.getElementById("button-user-contact-details").hidden = true;
     }
   </script>
 {% endblock %}

@@ -51,10 +51,18 @@
     <div>Реклама</div>
     <div>Реклама</div>
   </div>
-  <div id="footer">    
+  <div id="footer">
+    <span class="data">Copyright &copy;
+             <script type="text/JavaScript">
+                 document.write(new Date().getFullYear());                    
+             </script>
+    </span>   
     <span class="data"><a href="{% url "classifieds:about_us" %}">О нас</a></span>
     <span class="data"><a href="{% url "classifieds:contacts" %}">Конткты</a></span>
   </div>
+
+    {% block js %}
+    {% endblock %}
 
 </body>
 </html>

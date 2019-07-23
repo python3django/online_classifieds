@@ -472,3 +472,9 @@ ul.messages li a.close {
       box-shadow: 3px 3px 3px rgba(0, 0, 0, .3);
 }
 
+
+/* подсвечиваем поле ввода при фокусировке на нем */
+input:focus:not([type="submit"]) { 
+  background: #FFE1B1;
+}
+

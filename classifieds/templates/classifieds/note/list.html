@@ -85,82 +85,84 @@
     {% include "pagination.html" with page=notes %}
   </div>
 </div>  
+{% endblock %}
+
+{% block js %}
+  <script type="text/javascript">
+
+    /*  при наведении курсора мышки на элемент навигационной панели во всплывающем 
+    окошке будет дублироваться текстовое содержимое этого элемента. Нужно в ситуации 
+    когда название элемента настолько длинное что не отображается полностью */
+
+    var navbar = document.getElementById("sidebar");
+    var showingTooltip;
+
+    function handlerMouseover(event) {
+        var target = event.target;
+        // цикл двигается вверх от target к родителям до this
+        while (target !== this) {
+            if (target.tagName == 'LI') {
+                event.target.style.backgroundColor = '#efefef';
+                var tooltip = target.textContent;
+                break;
+            }
+            target = target.parentNode;
+        } 
+        if (!tooltip) return;
+        // показать и запомнить подсказку
+        showingTooltip = showTooltip(tooltip, target);    
+    };
 
 
-<script>
 
-/*  при наведении курсора мышки на элемент навигационной панели во всплывающем 
-окошке будет дублироваться текстовое содержимое этого элемента. Нужно в ситуации 
-когда название элемента настолько длинное что не отображается полностью */
+    function showTooltip(text, elem) {
+        var tooltipElem = document.createElement('div');
+        tooltipElem.className = 'tooltip';
+        tooltipElem.innerHTML = text;
+        //tooltipElem.textContent = text;
+        document.body.appendChild(tooltipElem);
 
-var navbar = document.getElementById("sidebar");
-var showingTooltip;
+        var coords = elem.getBoundingClientRect();
 
-function handlerMouseover(event) {
-    var target = event.target;
-    // цикл двигается вверх от target к родителям до this
-    while (target !== this) {
-        if (target.tagName == 'LI') {
-            event.target.style.backgroundColor = '#efefef';
-            var tooltip = target.textContent;
-            break;
+        var left = coords.right;
+
+        // не вылезать за верхнюю границу окна
+        var top = coords.top;    
+        if(top < 0) { 
+            top = coords.top + elem.offsetHeight + 5; 
         }
-        target = target.parentNode;
-    } 
-    if (!tooltip) return;
-    // показать и запомнить подсказку
-    showingTooltip = showTooltip(tooltip, target);    
-};
+
+        // не вылезать за нижнюю границу окна
+        var bottom = coords.bottom;
+        if(bottom > document.body.clientHeight) {
+            var myElemHeight = bottom - top; 
+            top = document.body.clientHeight - myElemHeight; 
+        }
+
+        tooltipElem.style.left = left + 'px';
+        tooltipElem.style.top = top + 'px';
+
+        return tooltipElem;
+    };
 
 
-function showTooltip(text, elem) {
-    var tooltipElem = document.createElement('div');
-    tooltipElem.className = 'tooltip';
-    tooltipElem.innerHTML = text;
-    //tooltipElem.textContent = text;
-    document.body.appendChild(tooltipElem);
 
-    var coords = elem.getBoundingClientRect();
-
-    var left = coords.right;
-
-    // не вылезать за верхнюю границу окна
-    var top = coords.top;    
-    if(top < 0) { 
-        top = coords.top + elem.offsetHeight + 5; 
-    }
-
-    // не вылезать за нижнюю границу окна
-    var bottom = coords.bottom;
-    if(bottom > document.body.clientHeight) {
-        var myElemHeight = bottom - top; 
-        top = document.body.clientHeight - myElemHeight; 
-    }
-
-    tooltipElem.style.left = left + 'px';
-    tooltipElem.style.top = top + 'px';
-
-    return tooltipElem;
-};
+    function handlerMouseout(event) {
+        // возможно такое, что mouseout сработал, а мы все еще внутри элемента (всплытие)
+        // но в этом случае сразу же будет и mouseover,
+        // то есть подсказка будет уничтожена и тут же показана заново
+        //
+        // это лишние расходы, их можно избежать дополнительными проверками
+        if (showingTooltip) {
+            document.body.removeChild(showingTooltip);
+            showingTooltip = false;
+        };  
+        event.target.style.backgroundColor = '';
+    };
 
 
-function handlerMouseout(event) {
-    // возможно такое, что mouseout сработал, а мы все еще внутри элемента (всплытие)
-    // но в этом случае сразу же будет и mouseover,
-    // то есть подсказка будет уничтожена и тут же показана заново
-    //
-    // это лишние расходы, их можно избежать дополнительными проверками
-    if (showingTooltip) {
-        document.body.removeChild(showingTooltip);
-        showingTooltip = false;
-    };  
-    event.target.style.backgroundColor = '';
-};
+    navbar.addEventListener("mouseover", handlerMouseover);
+    navbar.addEventListener("mouseout", handlerMouseout);
 
-
-navbar.addEventListener("mouseover", handlerMouseover);
-navbar.addEventListener("mouseout", handlerMouseout);
-
-</script>
-
+  </script>
 {% endblock %}
